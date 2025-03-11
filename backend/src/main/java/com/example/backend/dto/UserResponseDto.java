@@ -1,31 +1,29 @@
 package com.example.backend.dto;
 
-public class UserDto {
-    private int userId;
+public class UserResponseDto {
     private String userName;
-    private String userPassword;
     private String userEmail;
     private String userProfileImgUrl;
-    public UserDto(int userId, String userName, String userPassword, String userEmail, String userProfileImgUrl) {
-        this.userId = userId;
+    private String message;
+    public UserResponseDto(String userName, String userEmail, String userProfileImgUrl, String message) {
         this.userName = userName;
-        this.userPassword = userPassword;
         this.userEmail = userEmail;
         this.userProfileImgUrl = userProfileImgUrl;
+        this.message = message;
     }
-    public int getUserId() {
-        return userId;
+    public UserResponseDto(String message) {
+        this.message = message;
     }
     public String getUserName() {
         return userName;
-    }
-    public String getUserPassword() {
-        return userPassword;
     }
     public String getUserEmail() {
         return userEmail;
     }
     public String getUserProfileImgUrl() {
         return userProfileImgUrl;
+    }
+    public String getMessage() {
+        return message;
     }
 }

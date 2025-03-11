@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-243.23654.117">
+    <data-source name="ktbWeek6DB@localhost" uuid="bbebeaea-6fc0-4ae7-a50e-7702fe356529">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" />
+      <user-name>ktbWeek6DB</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>
