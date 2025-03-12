@@ -933,8 +933,5 @@ ktbweek6db|schema||ktbWeek6DB|localhost|UPDATE|G</Grants>
     <schema id="290" parent="1" name="performance_schema">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <user id="291" parent="1" name="ktbWeek6DB">
-      <Host>localhost</Host>
-    </user>
   </database-model>
 </dataSource>
