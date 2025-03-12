@@ -19,12 +19,13 @@ public class Board {
     @Column(length = 26, nullable = false)
     private String boardTitle;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String boardContent;
+
     private String boardContentImgUrl;
     private LocalDateTime boardCreatedAt;
-    private LocalDateTime boardUpdatedAt;
-    private Integer viewCount;
+    @Column(columnDefinition = "int default 0")
+    private Integer viewCount = 0;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
@@ -35,4 +36,8 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardLikes> likes;
+
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
 }
