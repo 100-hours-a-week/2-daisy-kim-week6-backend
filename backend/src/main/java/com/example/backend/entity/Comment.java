@@ -3,6 +3,7 @@ package com.example.backend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -16,10 +17,10 @@ public class Comment {
     private int commentId;
 
     @Column(nullable = false)
+    @Setter
     private String commentContent;
 
     private LocalDateTime commentCreatedAt;
-    private LocalDateTime commentUpdatedAt;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
@@ -29,11 +30,10 @@ public class Comment {
     @JoinColumn(name = "boardId", nullable = false)
     private Board board;
 
-    public Comment(String commentContent, User user, Board board, LocalDateTime commentCreatedAt, LocalDateTime commentUpdatedAt) {
+    public Comment(String commentContent, User user, Board board, LocalDateTime commentCreatedAt) {
         this.commentContent = commentContent;
         this.user = user;
         this.board = board;
         this.commentCreatedAt = commentCreatedAt;
-        this.commentUpdatedAt = commentUpdatedAt;
     }
 }

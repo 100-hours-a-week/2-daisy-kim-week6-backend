@@ -50,7 +50,7 @@ public class BoardService {
             Board board = boardEntity.get();
             board.increaseViewCount();
             boolean isMyBoard = false;
-            if (userId != null && board.getUser().getUserId() == userId) {
+            if (userId != null && board.getUser().getUserId().equals(userId)) {
                 isMyBoard = true;
             }
             boolean isLiked = board.getLikes().stream()
