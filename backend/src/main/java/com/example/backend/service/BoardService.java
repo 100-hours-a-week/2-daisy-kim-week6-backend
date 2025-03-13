@@ -4,7 +4,6 @@ import com.example.backend.dto.board.BoardDetailResponseDto;
 import com.example.backend.dto.board.BoardListResponseDto;
 import com.example.backend.dto.board.BoardPostRequestDto;
 import com.example.backend.entity.Board;
-import com.example.backend.entity.BoardLikes;
 import com.example.backend.entity.User;
 import com.example.backend.repository.BoardRepository;
 import jakarta.servlet.http.HttpSession;
@@ -115,5 +114,4 @@ public class BoardService {
         }
         return new BoardDetailResponseDto("게시글 삭제에 실패하였습니다.");
     }
-
 }
