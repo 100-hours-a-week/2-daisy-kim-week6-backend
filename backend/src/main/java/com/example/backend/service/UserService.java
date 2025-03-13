@@ -52,6 +52,7 @@ public class UserService {
             User user = userCheck.get();
             if(user.getUserPassword().equals(userLoginRequestDto.getUserPassword())) {
                 httpSession.setAttribute("userId", user.getUserId());
+                httpSession.setAttribute("user", user);
                 return new UserLoginResponseDto(user.getUserId(), "로그인 성공");
             }
         }

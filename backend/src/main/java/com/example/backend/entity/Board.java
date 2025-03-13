@@ -3,8 +3,10 @@ package com.example.backend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,12 +19,16 @@ public class Board {
     private Integer boardId;
 
     @Column(length = 26, nullable = false)
+    @Setter
     private String boardTitle;
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    @Setter
     private String boardContent;
 
+    @Setter
     private String boardContentImgUrl;
+
     private LocalDateTime boardCreatedAt;
     @Column(columnDefinition = "int default 0")
     private Integer viewCount = 0;
@@ -36,6 +42,16 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardLikes> likes;
+
+    public Board(String boardTitle, String boardContent, String boardContentImgUrl, User user, LocalDateTime now) {
+        this.boardTitle = boardTitle;
+        this.boardContent = boardContent;
+        this.boardContentImgUrl = boardContentImgUrl;
+        this.boardCreatedAt = now;
+        this.user = user;
+        likes = new ArrayList<>();
+        commentList = new ArrayList<>();
+    }
 
     public void increaseViewCount() {
         this.viewCount++;
