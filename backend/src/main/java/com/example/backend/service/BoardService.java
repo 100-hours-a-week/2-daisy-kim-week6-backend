@@ -74,7 +74,7 @@ public class BoardService {
         Board newBoard = new Board(
                 boardPostRequestDto.getTitle(),
                 boardPostRequestDto.getContent(),
-                boardPostRequestDto.getBoardImageUrl(),
+                boardPostRequestDto.getImageUrl(),
                 user,
                 LocalDateTime.now()
                 );
@@ -99,7 +99,7 @@ public class BoardService {
             boolean isLiked = boardLikeRepository.existsByBoardIdAndUserId(board.getId(), user.getId());
             board.setTitle(boardPostRequestDto.getTitle());
             board.setContent(boardPostRequestDto.getContent());
-            board.setImageUrl(boardPostRequestDto.getBoardImageUrl());
+            board.setImageUrl(boardPostRequestDto.getImageUrl());
             return new BoardDetailResponseDto(board, true, isLiked, "게시글을 성공적으로 수정하였습니다.");
         }
         return new BoardDetailResponseDto("해당 게시글이 존재하지 않습니다.");
