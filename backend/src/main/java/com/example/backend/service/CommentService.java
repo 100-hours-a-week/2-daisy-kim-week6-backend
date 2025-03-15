@@ -29,7 +29,7 @@ public class CommentService {
     }
     //답글 목록 조회
     public List<CommentResponseDto> getAllComments(Integer boardId) {
-        List<Comment> commentList = commentRepository.findByBoard_Id(boardId);
+        List<Comment> commentList = commentRepository.findByBoard_IdOrderByCreatedAtDesc(boardId);
         Integer userId = (Integer) httpSession.getAttribute("userId");
 
         return commentList.stream().map(comment -> new CommentResponseDto(
