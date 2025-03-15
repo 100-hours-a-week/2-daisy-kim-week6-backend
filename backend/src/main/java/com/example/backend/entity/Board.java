@@ -16,44 +16,52 @@ import java.util.List;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer boardId;
+    private Integer id;
 
     @Column(length = 26, nullable = false)
     @Setter
-    private String boardTitle;
+    private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     @Setter
-    private String boardContent;
+    private String content;
 
     @Setter
-    private String boardContentImgUrl;
+    private String imageUrl;
 
-    private LocalDateTime boardCreatedAt;
+    private LocalDateTime createdAt;
     @Column(columnDefinition = "int default 0")
     private Integer viewCount = 0;
+    @Column(columnDefinition = "int default 0")
+    private Integer likeCount = 0;
+    @Column(columnDefinition = "int default 0")
+    private Integer commentCount = 0;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> commentList;
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BoardLikes> likes;
-
-    public Board(String boardTitle, String boardContent, String boardContentImgUrl, User user, LocalDateTime now) {
-        this.boardTitle = boardTitle;
-        this.boardContent = boardContent;
-        this.boardContentImgUrl = boardContentImgUrl;
-        this.boardCreatedAt = now;
+    public Board(String title, String content, String imageUrl, User user, LocalDateTime now) {
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.createdAt = now;
         this.user = user;
-        likes = new ArrayList<>();
-        commentList = new ArrayList<>();
     }
 
     public void increaseViewCount() {
         this.viewCount++;
+    }
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+    public void increaseCommentCount() {
+        this.commentCount++;
+    }
+    public void decreaseCommentCount() {
+        this.commentCount--;
+    }
+    public void decreaseLikeCount() {
+        this.likeCount--;
     }
 }

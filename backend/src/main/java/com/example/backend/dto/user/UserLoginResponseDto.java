@@ -1,16 +1,13 @@
 package com.example.backend.dto.user;
 
+import lombok.Getter;
+
+@Getter
 public class UserLoginResponseDto {
-    private Integer userId;
+    private Integer id;
     private String message;
-    public UserLoginResponseDto(Integer userId, String message) {
-        this.userId = userId;
+    public UserLoginResponseDto(Integer id, String message) {
+        this.id = id;
         this.message = message;
-    }
-    public Integer getUserId() {
-        return userId;
-    }
-    public String getMessage() {
-        return message;
     }
 }

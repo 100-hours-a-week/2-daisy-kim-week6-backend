@@ -14,28 +14,28 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private Integer id;
 
     @Setter
     @Column(nullable = false, length = 10)
-    private String userName;
-
-    @Setter
-    @Column(nullable = false, length = 20)
-    private String userPassword;
-
-    @Column(nullable = false, unique = true)
-    private String userEmail;
+    private String name;
 
     @Setter
     @Column(nullable = false)
-    private String userProfileImgUrl;
+    private String password;
 
-    public User(String userName, String userPassword, String userEmail, String userProfileImgUrl) {
-        this.userName = userName;
-        this.userPassword = userPassword;
-        this.userEmail = userEmail;
-        this.userProfileImgUrl = userProfileImgUrl;
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Setter
+    @Column(nullable = false)
+    private String imageUrl;
+
+    public User(String name, String password, String email, String imageUrl) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.imageUrl = imageUrl;
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

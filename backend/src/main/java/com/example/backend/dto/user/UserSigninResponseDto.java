@@ -1,14 +1,14 @@
 package com.example.backend.dto.user;
 
 public class UserSigninResponseDto {
-    private Integer userId;
+    private Integer id;
     private String message;
     public UserSigninResponseDto(Integer userId, String message) {
-        this.userId = userId;
+        this.id = userId;
         this.message = message;
     }
-    public Integer getUserId() {
-        return userId;
+    public Integer getId() {
+        return id;
     }
 
     public String getMessage() {

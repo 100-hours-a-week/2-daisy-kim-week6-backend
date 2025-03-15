@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class BoardPostRequestDto {
     @NotBlank(message = "제목을 작성해 주세요.")
-    private String boardTitle;
+    private String title;
     @NotBlank(message = "내용을 작성해 주세요.")
-    private String boardContent;
-    private String boardContentImgUrl;
+    private String content;
+    private String boardImageUrl;
 }

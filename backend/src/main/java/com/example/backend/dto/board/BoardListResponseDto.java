@@ -6,25 +6,25 @@ import java.time.LocalDateTime;
 
 @Getter
 public class BoardListResponseDto {
-    private Integer boardId;
-    private String boardTitle;
-    private LocalDateTime boardCreatedAt;
+    private Integer id;
+    private String title;
+    private LocalDateTime createdAt;
     private String userName;
     private String userProfileImageUrl;
-    private Integer boardLikeCount;
-    private Integer boardCommentCount;
-    private Integer boardViewCount;
+    private Integer likeCount;
+    private Integer commentCount;
+    private Integer viewCount;
 
     public BoardListResponseDto() {}
 
-    public BoardListResponseDto(Integer boardId, String boardTitle, LocalDateTime boardCreatedAt, String userName, String userProfileImgUrl, int boardLikeCount, int boardCommentCount, Integer boardViewCount) {
-        this.boardId = boardId;
-        this.boardTitle = boardTitle;
-        this.boardCreatedAt = boardCreatedAt;
+    public BoardListResponseDto(Integer id, String title, LocalDateTime createdAt, String userName, String userProfileImgUrl, int likeCount, int commentCount, Integer viewCount) {
+        this.id = id;
+        this.title = title;
+        this.createdAt = createdAt;
         this.userName = userName;
         this.userProfileImageUrl = userProfileImgUrl;
-        this.boardLikeCount = boardLikeCount;
-        this.boardCommentCount = boardCommentCount;
-        this.boardViewCount = boardViewCount;
+        this.likeCount = likeCount;
+        this.commentCount = commentCount;
+        this.viewCount = viewCount;
     }
 }

@@ -5,6 +5,7 @@ import com.example.backend.dto.board.BoardListResponseDto;
 import com.example.backend.dto.board.BoardPostRequestDto;
 import com.example.backend.entity.Board;
 import com.example.backend.entity.User;
+import com.example.backend.repository.BoardLikeRepository;
 import com.example.backend.repository.BoardRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -18,23 +19,25 @@ import java.util.stream.Collectors;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final BoardLikeRepository boardLikeRepository;
     private final HttpSession session;
-    public BoardService(BoardRepository boardRepository, HttpSession session) {
+    public BoardService(BoardRepository boardRepository, HttpSession session, BoardLikeRepository boardLikeRepository) {
         this.boardRepository = boardRepository;
+        this.boardLikeRepository = boardLikeRepository;
         this.session = session;
     }
 
     //리스트 조회
     public List<BoardListResponseDto> getBoardList() {
-         List<Board> boardList = boardRepository.findAllByOrderByBoardCreatedAtDesc();
+         List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
          return boardList.stream().map(board -> new BoardListResponseDto(
-                 board.getBoardId(),
-                 board.getBoardTitle(),
-                 board.getBoardCreatedAt(),
-                 board.getUser().getUserName(),
-                 board.getUser().getUserProfileImgUrl(),
-                 board.getLikes().size(),
-                 board.getCommentList().size(),
+                 board.getId(),
+                 board.getTitle(),
+                 board.getCreatedAt(),
+                 board.getUser().getName(),
+                 board.getUser().getImageUrl(),
+                 board.getLikeCount(),
+                 board.getCommentCount(),
                  board.getViewCount()
                  ))
                  .collect(Collectors.toList());
@@ -50,11 +53,10 @@ public class BoardService {
             Board board = boardEntity.get();
             board.increaseViewCount();
             boolean isMyBoard = false;
-            if (userId != null && board.getUser().getUserId().equals(userId)) {
+            if (userId != null && board.getUser().getId().equals(userId)) {
                 isMyBoard = true;
             }
-            boolean isLiked = board.getLikes().stream()
-                    .anyMatch(like -> like.getUser().getUserId().equals(userId));
+            boolean isLiked = boardLikeRepository.existsByBoardIdAndUserId(board.getId(), userId);
             return new BoardDetailResponseDto(board, isMyBoard, isLiked, "게시글 조회에 성공하였습니다.");
         }
         return new BoardDetailResponseDto("게시글을 조회하는 데 실패하였습니다.");
@@ -62,7 +64,7 @@ public class BoardService {
 
     //게시글 작성
     public BoardDetailResponseDto writeBoard(BoardPostRequestDto boardPostRequestDto) {
-        if (boardPostRequestDto.getBoardTitle().length() > 26) {
+        if (boardPostRequestDto.getTitle().length() > 26) {
             return new BoardDetailResponseDto("제목은 최대 26글자입니다.");
         }
         User user = (User) session.getAttribute("user");
@@ -70,9 +72,9 @@ public class BoardService {
             return new BoardDetailResponseDto("로그인이 필요합니다.");
         }
         Board newBoard = new Board(
-                boardPostRequestDto.getBoardTitle(),
-                boardPostRequestDto.getBoardContent(),
-                boardPostRequestDto.getBoardContentImgUrl(),
+                boardPostRequestDto.getTitle(),
+                boardPostRequestDto.getContent(),
+                boardPostRequestDto.getBoardImageUrl(),
                 user,
                 LocalDateTime.now()
                 );
@@ -91,14 +93,13 @@ public class BoardService {
             if (user == null) {
                 return new BoardDetailResponseDto("로그인한 사용자만 접근할 수 있습니다.");
             }
-            if (!board.getUser().getUserId().equals(user.getUserId())) {
+            if (!board.getUser().getId().equals(user.getId())) {
                 return new BoardDetailResponseDto("본인의 게시글만 수정할 수 있습니다.");
             }
-            boolean isLiked = board.getLikes().stream()
-                    .anyMatch(like -> like.getUser().equals(user));
-            board.setBoardTitle(boardPostRequestDto.getBoardTitle());
-            board.setBoardContent(boardPostRequestDto.getBoardContent());
-            board.setBoardContentImgUrl(boardPostRequestDto.getBoardContentImgUrl());
+            boolean isLiked = boardLikeRepository.existsByBoardIdAndUserId(board.getId(), user.getId());
+            board.setTitle(boardPostRequestDto.getTitle());
+            board.setContent(boardPostRequestDto.getContent());
+            board.setImageUrl(boardPostRequestDto.getBoardImageUrl());
             return new BoardDetailResponseDto(board, true, isLiked, "게시글을 성공적으로 수정하였습니다.");
         }
         return new BoardDetailResponseDto("해당 게시글이 존재하지 않습니다.");
