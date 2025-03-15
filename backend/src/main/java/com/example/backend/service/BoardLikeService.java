@@ -29,15 +29,17 @@ public class BoardLikeService {
         if (user == null) {
             return new ResponseDto("로그인하세요.");
         }
-        Optional<BoardLikes> boardLikeEntity = boardLikeRepository.findByBoard_BoardIdAndUser_UserId(boardId, user.getUserId());
-        if (boardLikeEntity.isPresent()) {
+        if (boardLikeRepository.existsByBoardIdAndUserId(boardId, user.getId())) {
             return new ResponseDto("좋아요를 이미 등록했습니다.");
         }
+
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
-
         BoardLikes boardLike = new BoardLikes(user, board);
         boardLikeRepository.save(boardLike);
+        board.increaseLikeCount();
+        boardRepository.save(board);
+
         return new ResponseDto("좋아요 등록 성공");
     }
     //좋아요 취소
@@ -47,9 +49,14 @@ public class BoardLikeService {
         if (user == null) {
             return new ResponseDto("로그인하세요.");
         }
-        Optional<BoardLikes> boardLikeEntity = boardLikeRepository.findByBoard_BoardIdAndUser_UserId(boardId, user.getUserId());
+        Optional<BoardLikes> boardLikeEntity = boardLikeRepository.findByBoard_IdAndUser_Id(boardId, user.getId());
         if (boardLikeEntity.isPresent()) {
-            boardLikeRepository.delete(boardLikeEntity.get());
+            BoardLikes boardLike = boardLikeEntity.get();
+            Board board = boardLike.getBoard();
+
+            board.decreaseLikeCount();
+            boardRepository.save(board);
+            boardLikeRepository.delete(boardLike);
             return new ResponseDto("좋아요를 성공적으로 취소했습니다.");
         }
         return new ResponseDto("좋아요 취소 실패");

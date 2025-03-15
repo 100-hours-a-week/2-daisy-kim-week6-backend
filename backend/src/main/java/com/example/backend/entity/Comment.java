@@ -14,26 +14,26 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int commentId;
+    private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     @Setter
-    private String commentContent;
+    private String content;
 
-    private LocalDateTime commentCreatedAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "boardId", nullable = false)
+    @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    public Comment(String commentContent, User user, Board board, LocalDateTime commentCreatedAt) {
-        this.commentContent = commentContent;
+    public Comment(String content, User user, Board board, LocalDateTime createdAt) {
+        this.content = content;
         this.user = user;
         this.board = board;
-        this.commentCreatedAt = commentCreatedAt;
+        this.createdAt = createdAt;
     }
 }

@@ -4,13 +4,13 @@ import lombok.Getter;
 
 public class UserPasswordResponseDto {
     @Getter
-    private String userPassword;
+    private String password;
 
     @Getter
     private String message;
 
-    public UserPasswordResponseDto(String userPassword, String message) {
-        this.userPassword = userPassword;
+    public UserPasswordResponseDto(String password, String message) {
+        this.password = password;
         this.message = message;
     }
     public UserPasswordResponseDto(String message) {

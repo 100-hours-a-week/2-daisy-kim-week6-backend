@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 public class CommentRequestDto {
     @NotBlank(message = "답글 내용을 작성해 주세요.")
-    private String commentContent;
+    private String content;
 
-    public CommentRequestDto(String commentContent) {
-        this.commentContent = commentContent;
+    public CommentRequestDto(String content) {
+        this.content = content;
     }
 }

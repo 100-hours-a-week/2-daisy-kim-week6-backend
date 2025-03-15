@@ -3,7 +3,6 @@ package com.example.backend.controller;
 import com.example.backend.dto.ResponseDto;
 import com.example.backend.dto.comment.CommentRequestDto;
 import com.example.backend.dto.comment.CommentResponseDto;
-import com.example.backend.entity.Comment;
 import com.example.backend.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 

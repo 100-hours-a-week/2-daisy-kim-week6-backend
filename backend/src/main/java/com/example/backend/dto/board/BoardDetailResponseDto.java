@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 
 @Getter
 public class BoardDetailResponseDto {
-    private Integer boardId;
-    private String boardTitle;
-    private String boardContent;
-    private String boardContentImgUrl;
-    private LocalDateTime boardCreatedAt;
-    private Integer boardLikeCount;
-    private Integer boardCommentCount;
-    private Integer boardViewCount;
+    private Integer id;
+    private String title;
+    private String content;
+    private String boardImageUrl;
+    private LocalDateTime createdAt;
+    private Integer likeCount;
+    private Integer commentCount;
+    private Integer viewCount;
     private Integer userId;
     private String userName;
     private String userProfileImgUrl;
@@ -28,17 +28,17 @@ public class BoardDetailResponseDto {
     private String message;
 
     public BoardDetailResponseDto(Board board, boolean isMyBoard, boolean isLike, String message) {
-        this.boardId = board.getBoardId();
-        this.boardTitle = board.getBoardTitle();
-        this.boardContent = board.getBoardContent();
-        this.boardContentImgUrl = board.getBoardContentImgUrl();
-        this.boardCreatedAt = board.getBoardCreatedAt();
-        this.boardLikeCount = board.getLikes().size();
-        this.boardCommentCount = board.getCommentList().size();
-        this.boardViewCount = board.getViewCount();
-        this.userId = board.getUser().getUserId();
-        this.userName = board.getUser().getUserName();
-        this.userProfileImgUrl = board.getUser().getUserProfileImgUrl();
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.boardImageUrl = board.getImageUrl();
+        this.createdAt = board.getCreatedAt();
+        this.likeCount = board.getLikeCount();
+        this.commentCount = board.getCommentCount();
+        this.viewCount = board.getViewCount();
+        this.userId = board.getUser().getId();
+        this.userName = board.getUser().getName();
+        this.userProfileImgUrl = board.getUser().getImageUrl();
         this.isMyBoard = isMyBoard;
         this.isLike = isLike;
         this.message = message;

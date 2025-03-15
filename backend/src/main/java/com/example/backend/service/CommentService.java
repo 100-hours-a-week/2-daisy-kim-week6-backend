@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,15 +29,17 @@ public class CommentService {
     }
     //답글 목록 조회
     public List<CommentResponseDto> getAllComments(Integer boardId) {
-        List<Comment> commentList = commentRepository.findByBoard_BoardId(boardId);
+        List<Comment> commentList = commentRepository.findByBoard_Id(boardId);
         Integer userId = (Integer) httpSession.getAttribute("userId");
 
         return commentList.stream().map(comment -> new CommentResponseDto(
-                comment.getCommentContent(),
-                comment.getCommentCreatedAt(),
-                comment.getUser().getUserName(),
-                comment.getUser().getUserProfileImgUrl(),
-                comment.getUser().getUserId().equals(userId)
+                comment.getId(),
+                comment.getContent(),
+                comment.getCreatedAt(),
+                comment.getUser().getName(),
+                comment.getUser().getImageUrl(),
+                comment.getUser().getId().equals(userId),
+                "답글 목록 조회 성공"
         ))
                 .collect(Collectors.toList());
     }
@@ -49,12 +52,14 @@ public class CommentService {
             return new ResponseDto("로그인하세요.");
         }
         Comment newComment = new Comment(
-                commentRequestDto.getCommentContent(),
+                commentRequestDto.getContent(),
                 user,
                 board,
                 LocalDateTime.now()
         );
         commentRepository.save(newComment);
+        Objects.requireNonNull(board).increaseCommentCount();
+        boardRepository.save(board);
         return new ResponseDto("답글을 성공적으로 생성하였습니다.");
     }
 
@@ -68,13 +73,16 @@ public class CommentService {
         if (comment == null) {
             return new ResponseDto("지울 수 있는 답글이 없습니다.");
         }
-        comment.setCommentContent(commentRequestDto.getCommentContent());
+        comment.setContent(commentRequestDto.getContent());
         return new ResponseDto("답글을 성공적으로 삭제하였습니다.");
     }
 
     //답글 삭제
     public ResponseDto deleteComment(Integer commentId) {
         commentRepository.deleteById(commentId);
+        Board board = boardRepository.findById(commentId).orElse(null);
+        Objects.requireNonNull(board).decreaseCommentCount();
+        boardRepository.save(board);
         return new ResponseDto("답글을 성공적으로 삭제하였습니다.");
     }
 

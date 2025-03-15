@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 public class BoardLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int likeId;
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "boardId", nullable = false)
+    @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
     public BoardLikes(User user, Board board) {

@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface BoardLikeRepository extends JpaRepository<BoardLikes, Integer> {
-    Optional<BoardLikes> findByBoard_BoardIdAndUser_UserId(Integer boardId, Integer userId);
+    Optional<BoardLikes> findByBoard_IdAndUser_Id(Integer boardId, Integer userId);
+    boolean existsByBoardIdAndUserId(Integer id, Integer userId);
 }
