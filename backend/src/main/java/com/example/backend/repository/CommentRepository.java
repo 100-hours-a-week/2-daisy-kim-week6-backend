@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     public List<Comment> findByBoard_IdOrderByCreatedAtDesc(Integer boardId);
+    public Integer countByBoard_Id(Integer boardId);
 }

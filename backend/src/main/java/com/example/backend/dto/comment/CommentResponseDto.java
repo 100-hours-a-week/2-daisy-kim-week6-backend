@@ -15,7 +15,17 @@ public class CommentResponseDto {
     private String content;
     private LocalDateTime createdAt;
     private String userName;
-    private String userProfileImgUrl;
+    private String userImageUrl;
     private boolean isMyComment;
+    private Integer count;
     private String message;
+
+    public CommentResponseDto(Integer commentCount, String message) {
+        this.count = commentCount;
+        this.message = message;
+    }
+
+    public CommentResponseDto(String message) {
+        this.message = message;
+    }
 }

@@ -10,19 +10,19 @@ public class BoardListResponseDto {
     private String title;
     private LocalDateTime createdAt;
     private String userName;
-    private String userProfileImageUrl;
+    private String userImageUrl;
     private Integer likeCount;
     private Integer commentCount;
     private Integer viewCount;
 
     public BoardListResponseDto() {}
 
-    public BoardListResponseDto(Integer id, String title, LocalDateTime createdAt, String userName, String userProfileImgUrl, int likeCount, int commentCount, Integer viewCount) {
+    public BoardListResponseDto(Integer id, String title, LocalDateTime createdAt, String userName, String userImageUrl, int likeCount, int commentCount, Integer viewCount) {
         this.id = id;
         this.title = title;
         this.createdAt = createdAt;
         this.userName = userName;
-        this.userProfileImageUrl = userProfileImgUrl;
+        this.userImageUrl = userImageUrl;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.viewCount = viewCount;

@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +37,7 @@ public class BoardService {
                  board.getTitle(),
                  board.getCreatedAt(),
                  board.getUser().getName(),
-                 board.getUser().getImageUrl(),
+                 "/uploads/" + new File(board.getUser().getImageUrl()).getName(),
                  board.getLikeCount(),
                  board.getCommentCount(),
                  board.getViewCount()
@@ -63,13 +65,13 @@ public class BoardService {
     }
 
     //게시글 작성
-    public BoardDetailResponseDto writeBoard(BoardPostRequestDto boardPostRequestDto) {
-        if (boardPostRequestDto.getTitle().length() > 26) {
-            return new BoardDetailResponseDto("제목은 최대 26글자입니다.");
-        }
+    public BoardDetailResponseDto writeBoard(BoardPostRequestDto boardPostRequestDto) throws IOException {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return new BoardDetailResponseDto("로그인이 필요합니다.");
+        }
+        if (boardPostRequestDto.getTitle().length() > 26) {
+            return new BoardDetailResponseDto("제목은 최대 26글자입니다.");
         }
         Board newBoard = new Board(
                 boardPostRequestDto.getTitle(),
@@ -84,12 +86,11 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
-    public BoardDetailResponseDto updateBoard(Integer boardId, BoardPostRequestDto boardPostRequestDto) {
+    public BoardDetailResponseDto updateBoard(Integer boardId, BoardPostRequestDto boardPostRequestDto) throws IOException {
         Optional<Board> boardEntity = boardRepository.findById(boardId);
         if (boardEntity.isPresent()) {
             User user = (User) session.getAttribute("user");
             Board board = boardEntity.get();
-
             if (user == null) {
                 return new BoardDetailResponseDto("로그인한 사용자만 접근할 수 있습니다.");
             }
@@ -99,7 +100,9 @@ public class BoardService {
             boolean isLiked = boardLikeRepository.existsByBoardIdAndUserId(board.getId(), user.getId());
             board.setTitle(boardPostRequestDto.getTitle());
             board.setContent(boardPostRequestDto.getContent());
-            board.setImageUrl(boardPostRequestDto.getImageUrl());
+            if (boardPostRequestDto.getImageUrl() != null) {
+                board.setImageUrl(boardPostRequestDto.getImageUrl());
+            }
             return new BoardDetailResponseDto(board, true, isLiked, "게시글을 성공적으로 수정하였습니다.");
         }
         return new BoardDetailResponseDto("해당 게시글이 존재하지 않습니다.");

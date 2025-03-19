@@ -5,9 +5,12 @@ import com.example.backend.dto.user.*;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -23,7 +26,7 @@ public class UserService {
     }
 
     //회원가입
-    public UserSigninResponseDto signInUser(UserSigninRequestDto userSigninRequestDto) {
+    public UserSigninResponseDto signInUser(UserSigninRequestDto userSigninRequestDto) throws IOException {
         Optional<User> sameEmail = userRepository.findByEmail(userSigninRequestDto.getEmail());
         if (sameEmail.isPresent()) {
             return new UserSigninResponseDto(null, "중복된 이메일입니다.");
@@ -65,6 +68,7 @@ public class UserService {
     }
 
     //탈퇴
+    @Transactional
     public ResponseDto withdrawUser() {
         Integer userId = (Integer) httpSession.getAttribute("userId");
         if(userId == null) {
@@ -78,6 +82,20 @@ public class UserService {
         return new ResponseDto("회원 탈퇴에 실패하셨습니다.");
     }
 
+    //로그아웃
+    public ResponseDto logoutUser() {
+        Integer userId = (Integer) httpSession.getAttribute("userId");
+        if(userId == null) {
+            return new ResponseDto("로그인한 사용자만 로그아웃할 수 있습니다.");
+        }
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()) {
+            httpSession.invalidate();
+            return new ResponseDto("로그아웃 완료");
+        }
+        return new ResponseDto("로그아웃 실패");
+    }
+
     //개인 정보 수정 시 불러오는 정보
     public UserResponseDto getUser() {
         Integer userId = (Integer) httpSession.getAttribute("userId");
@@ -87,13 +105,14 @@ public class UserService {
         Optional<User> userEntity = userRepository.findById(userId);
         if(userEntity.isPresent()) {
             User user = userEntity.get();
-            return new UserResponseDto(user.getName(), user.getEmail(), user.getImageUrl(), "개인 정보 불러오기 성공");
+            String imageUrl = "/uploads/" + new File(user.getImageUrl()).getName();
+            return new UserResponseDto(user.getName(), user.getEmail(), imageUrl, "개인 정보 불러오기 성공");
         }
         return new UserResponseDto("회원 정보 불러오기 실패");
     }
 
     //개인 정보 수정
-    public UserResponseDto editUser(UserSigninRequestDto userSigninRequestDto) {
+    public UserResponseDto editUser(UserSigninRequestDto userSigninRequestDto) throws IOException {
         Integer userId = (Integer) httpSession.getAttribute("userId");
         if (userId == null) {
             return new UserResponseDto("로그인하지 않은 유저는 회원 정보를 수정할 수 없습니다.");
@@ -101,20 +120,34 @@ public class UserService {
         Optional<User> userEntity = userRepository.findById(userId);
         if (userEntity.isPresent()) {
             User user = userEntity.get();
+            //이미지만 있을 때
+            //이름만 있을 때
+
+            //이름이 없을 때
             if (userSigninRequestDto.getName() == null || userSigninRequestDto.getName().isEmpty()) {
-                return new UserResponseDto("닉네임을 입력해 주세요.");
-            } else if (userSigninRequestDto.getName().length() >= 11) {
-                return new UserResponseDto("닉네임은 최대 10자까지 작성 가능합니다.");
-            } else {
-                user.setName(userSigninRequestDto.getName());
-            }
-            if (userSigninRequestDto.getImageUrl() == null || userSigninRequestDto.getImageUrl().isEmpty()) {
-                return new UserResponseDto("프로필 이미지를 등록해 주세요.");
-            } else {
+                //이미지가 없을 때
+                if (userSigninRequestDto.getImageUrl() == null || userSigninRequestDto.getImageUrl().isEmpty()) {
+                    return new UserResponseDto("이미지나 닉네임을 입력해 주세요.");
+                }
+                //이미지만 있을 때
                 user.setImageUrl(userSigninRequestDto.getImageUrl());
+                userRepository.save(user);
+                String imageUrl = "/uploads/" + new File(user.getImageUrl()).getName();
+                return new UserResponseDto(imageUrl, "프로필 이미지 수정 성공");
             }
+            //이름 있고 길이가 길 때
+            if (userSigninRequestDto.getName().length() > 10) {
+                return new UserResponseDto("닉네임은 최대 10자까지 작성 가능합니다.");
+            }
+            //이름 걍 가능, 이미지 있을 때
+            String imageUrl = "";
+            if (userSigninRequestDto.getImageUrl() != null && !userSigninRequestDto.getImageUrl().isEmpty()) {
+                user.setImageUrl(userSigninRequestDto.getImageUrl());
+                imageUrl = "/uploads/" + new File(user.getImageUrl()).getName();
+            }
+            user.setName(userSigninRequestDto.getName());
             userRepository.save(user);
-            return new UserResponseDto("회원 정보 수정 성공하였습니다.");
+            return new UserResponseDto(user.getName(), imageUrl, "회원 정보 수정 성공하였습니다.");
         }
         return new UserResponseDto("회원 정보 수정 실패");
     }

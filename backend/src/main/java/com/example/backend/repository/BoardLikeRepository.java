@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface BoardLikeRepository extends JpaRepository<BoardLikes, Integer> {
     Optional<BoardLikes> findByBoard_IdAndUser_Id(Integer boardId, Integer userId);
     boolean existsByBoardIdAndUserId(Integer id, Integer userId);
+    Integer countByBoardId(Integer boardId);
 }

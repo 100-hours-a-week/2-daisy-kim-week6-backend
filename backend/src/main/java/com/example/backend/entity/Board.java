@@ -26,6 +26,7 @@ public class Board {
     @Setter
     private String content;
 
+    @Lob
     @Setter
     private String imageUrl;
 
@@ -41,6 +42,13 @@ public class Board {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<BoardLikes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+
     public Board(String title, String content, String imageUrl, User user, LocalDateTime now) {
         this.title = title;
         this.content = content;
@@ -48,6 +56,7 @@ public class Board {
         this.createdAt = now;
         this.user = user;
     }
+
 
     public void increaseViewCount() {
         this.viewCount++;
