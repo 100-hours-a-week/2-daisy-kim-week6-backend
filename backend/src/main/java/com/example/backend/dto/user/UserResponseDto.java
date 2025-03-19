@@ -1,29 +1,30 @@
 package com.example.backend.dto.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserResponseDto {
     private String name;
     private String email;
     private String imageUrl;
     private String message;
-    public UserResponseDto(String userName, String userEmail, String userProfileImgUrl, String message) {
-        this.name = userName;
-        this.email = userEmail;
-        this.imageUrl = userProfileImgUrl;
-        this.message = message;
-    }
+
     public UserResponseDto(String message) {
         this.message = message;
     }
-    public String getUserName() {
-        return name;
+
+    public UserResponseDto(String name, String imageUrl, String message) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.message = message;
     }
-    public String getEmail() {
-        return email;
-    }
-    public String getImageUrl() {
-        return imageUrl;
-    }
-    public String getMessage() {
-        return message;
+
+    public UserResponseDto(String name, String message) {
+        this.name = name;
+        this.message = message;
     }
 }

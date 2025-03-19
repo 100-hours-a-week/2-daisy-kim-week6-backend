@@ -27,6 +27,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Lob
     @Setter
     @Column(nullable = false)
     private String imageUrl;
@@ -38,12 +39,12 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Board> boards;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<BoardLikes> likes;
 }

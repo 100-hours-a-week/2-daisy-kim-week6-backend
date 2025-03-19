@@ -23,7 +23,7 @@ public class CommentController {
 
     //답글 작성
     @PostMapping("")
-    public ResponseDto createComment(@PathVariable Integer boardId, @RequestBody CommentRequestDto commentRequestDto) {
+    public CommentResponseDto createComment(@PathVariable Integer boardId, @RequestBody CommentRequestDto commentRequestDto) {
         return commentService.createComment(boardId, commentRequestDto);
     }
 
@@ -35,7 +35,7 @@ public class CommentController {
 
     //답글 삭제
     @DeleteMapping("/{commentId}")
-    public ResponseDto deleteComment(@PathVariable Integer commentId) {
+    public CommentResponseDto deleteComment(@PathVariable Integer commentId) {
         return commentService.deleteComment(commentId);
     }
 }
