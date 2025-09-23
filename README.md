@@ -1,8 +1,9 @@
 # 📌 프로젝트 개요
 ### "아무말 대잔치" 커뮤니티 백엔드 구현
 
-### 🔗 프론트엔드 레포지토리 링크
-https://github.com/100-hours-a-week/2-daisy-kim-week6-frontend
+### [🔗 프론트엔드 React 레포지토리 보러가기 (6주차 과제)](https://github.com/100-hours-a-week/2-daisy-kim-week6-frontend)
+
+### [🔗 프론트엔드 Vanilla.js 레포지토리 보러가기 (4주차 과제)](https://github.com/100-hours-a-week/2-daisy-kim-week4)
 
 ### 🛠️ 기술 스택
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-%2369AD3C.svg?style=for-the-badge&logo=spring&logoColor=%23ffffff)
